@@ -29,6 +29,7 @@ import heartBeat from './utils/heartbeat'
 import ensureArray from './utils/ensureArray'
 import enrichMeta from './utils/enrichMeta'
 
+import * as typeDefs from './pluginTypeDef';
 
 /**
  * Analytics library configuration
@@ -39,7 +40,7 @@ import enrichMeta from './utils/enrichMeta'
  * @param {string} [config.app] - Name of site / app
  * @param {string} [config.version] - Version of your app
  * @param {boolean} [config.debug] - Should analytics run in debug mode
- * @param {Array.<AnalyticsPlugin>}  [config.plugins] - Array of analytics plugins
+ * @param {Array.<typeDefs.AnalyticsPlugin>}  [config.plugins] - Array of analytics plugins
  * @return {AnalyticsInstance} Analytics Instance
  * @example
  *
@@ -275,26 +276,26 @@ function analytics(config = {}) {
     // Merge in custom plugin methods
     ...parsedOptions.methods
   }
-  
-  /**
-   * Analytic instance returned from initialization
-   * @typedef {Object} AnalyticsInstance
-   * @property {Identify} identify - Identify a user
-   * @property {Track} track - Track an analytics event
-   * @property {Page} page - Trigger page view
-   * @property {User} user - Get user data
-   * @property {Reset} reset - Clear information about user & reset analytics
-   * @property {Ready} ready - Fire callback on analytics ready event
-   * @property {On} on - Fire callback on analytics lifecycle events.
-   * @property {Once} once - Fire callback on analytics lifecycle events once.
-   * @property {GetState} getState - Get data about user, activity, or context.
-   * @property {Storage} storage - storage methods
-   * @property {Plugins} plugins - plugin methods
-   */
+
+   /**
+    * Analytic instance returned from initialization
+    * @typedef {Object} AnalyticsInstance
+    * @property {Identify} identify - Identify a user
+    * @property {Track} track - Track an analytics event
+    * @property {Page} page - Trigger page view
+    * @property {User} user - Get user data
+    * @property {Reset} reset - Clear information about user & reset analytics
+    * @property {Ready} ready - Fire callback on analytics ready event
+    * @property {On} on - Fire callback on analytics lifecycle events.
+    * @property {Once} once - Fire callback on analytics lifecycle events once.
+    * @property {GetState} getState - Get data about user, activity, or context.
+    * @property {Storage} storage - storage methods
+    * @property {Plugins} plugins - plugin methods
+  */
   const instance = {
     /**
     * Identify a user. This will trigger `identify` calls in any installed plugins and will set user data in localStorage
-    * @typedef {Function} Identify
+    * @callback Identify
     * @param  {String}   userId  - Unique ID of user
     * @param  {Object}   [traits]  - Object of user traits
     * @param  {Object}   [options] - Options to pass to identify call
@@ -360,7 +361,7 @@ function analytics(config = {}) {
     },
     /**
      * Track an analytics event. This will trigger `track` calls in any installed plugins
-     * @typedef {Function} Track
+     * @callback Track
      * @param  {String}   eventName - Event name
      * @param  {Object}   [payload]   - Event payload
      * @param  {Object}   [options]   - Event options
@@ -427,7 +428,7 @@ function analytics(config = {}) {
     },
     /**
      * Trigger page view. This will trigger `page` calls in any installed plugins
-     * @typedef {Function} Page
+     * @callback Page
      * @param  {PageData} [data] - Page data overrides.
      * @param  {Object}   [options] - Page tracking options
      * @param  {Function} [callback] - Callback to fire after page view call completes
@@ -490,7 +491,7 @@ function analytics(config = {}) {
     },
     /**
      * Get user data
-     * @typedef {Function} User
+     * @callback User
      * @param {string} [key] - dot.prop.path of user data. Example: 'traits.company.name'
      * @returns {string|object} value of user data or null
      *
@@ -518,7 +519,7 @@ function analytics(config = {}) {
     },
     /**
      * Clear all information about the visitor & reset analytic state.
-     * @typedef {Function} Reset
+     * @callback Reset
      * @param {Function} [callback] - Handler to run after reset
      * @returns {Promise}
      * @example
@@ -535,7 +536,7 @@ function analytics(config = {}) {
     },
     /**
      * Fire callback on analytics ready event
-     * @typedef {Function} Ready
+     * @callback Ready
      * @param  {Function} callback - function to trigger when all providers have loaded
      * @returns {DetachListeners} - Function to detach listener
      *
@@ -550,7 +551,7 @@ function analytics(config = {}) {
     },
     /**
      * Attach an event handler function for analytics lifecycle events.
-     * @typedef {Function} On
+     * @callback On
      * @param  {String}   name - Name of event to listen to
      * @param  {Function} callback - function to fire on event
      * @return {DetachListeners} - Function to detach listener
@@ -634,7 +635,7 @@ function analytics(config = {}) {
     },
     /**
      * Attach a handler function to an event and only trigger it only once.
-     * @typedef {Function} Once
+     * @callback Once
      * @param  {String} name - Name of event to listen to
      * @param  {Function} callback - function to fire on event
      * @return {DetachListeners} - Function to detach listener
@@ -675,7 +676,7 @@ function analytics(config = {}) {
     },
     /**
      * Get data about user, activity, or context. Access sub-keys of state with `dot.prop` syntax.
-     * @typedef {Function} GetState
+     * @callback GetState
      * @param  {string} [key] - dot.prop.path value of state
      * @return {any}
      *
@@ -749,7 +750,7 @@ function analytics(config = {}) {
     storage: {
       /**
        * Get value from storage
-       * @typedef {Function} GetItem
+       * @callback GetItem
        * @param {String} key - storage key
        * @param {Object} [options] - storage options
        * @return {Any}
@@ -761,7 +762,7 @@ function analytics(config = {}) {
       getItem: storage.getItem,
       /**
        * Set storage value
-       * @typedef {Function} SetItem
+       * @callback SetItem
        * @param {String} key - storage key
        * @param {any} value - storage value
        * @param {Object} [options] - storage options
@@ -780,7 +781,7 @@ function analytics(config = {}) {
       },
       /**
        * Remove storage value
-       * @typedef {Function} RemoveItem
+       * @callback RemoveItem
        * @param {String} key - storage key
        * @param {Object} [options] - storage options
        *

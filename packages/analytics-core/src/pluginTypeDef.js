@@ -10,3 +10,5 @@
   * @property {function} [loaded] - Function to determine if analytics script loaded
   * @property {function} [ready] - Fire function when plugin ready
   */
+
+export {};
